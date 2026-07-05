@@ -17,6 +17,8 @@ class Convert:
         """
         self.public_movie = public_movie
         self.private_movie = private_movie
+        self.current_frame = 0
+        self.total_frames = self.get_total_frames()
         self.logger = getLogger(__name__)
         self.data = Data()
 
@@ -34,6 +36,15 @@ class Convert:
             self.logger.error("Failed to open private movie.")
             return False
         return True
+
+    def get_total_frames(self):
+        """
+        動画の総フレーム数を取得するメソッド
+
+        Returns:
+            int: 総フレーム数
+        """
+        return int(self.public_movie.get(cv2.CAP_PROP_FRAME_COUNT))
 
     def convert(self):
         """
@@ -62,6 +73,10 @@ class Convert:
 
             # データの書き込み
             self.data.add_frame(compose_result)
+            self.current_frame += 1
+            self.logger.debug(
+                f"Processed frame {self.current_frame}/{self.total_frames}"
+            )
             print(".", end="", flush=True)
 
         return (

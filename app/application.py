@@ -1,4 +1,5 @@
 import tkinter as tk
+import tkinter.ttk as ttk
 from logging import getLogger
 from tkinter import filedialog
 
@@ -14,7 +15,7 @@ class Application(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("PhantoMovie")
-        self.geometry("500x340")
+        self.geometry("500x360")
         self.resizable(False, False)
         self.create_widgets()
         self.file = File()
@@ -86,6 +87,16 @@ class Application(tk.Tk):
             private_upload_frame, text="変換", command=self.convert_btn_click
         )
         self.convert.grid(row=0, column=2, padx=10, pady=1)
+
+        status_frame = tk.Frame(self)
+        status_frame.grid(row=4, column=0, padx=10, pady=1, sticky=tk.W + tk.E)
+
+        self.progress = ttk.Progressbar(status_frame, mode="determinate", maximum=100)
+        self.progress.pack(fill=tk.X, padx=10, pady=1)
+
+    def update_progress(self, value):
+        self.progress["value"] = value
+        self.update_idletasks()
 
     def select_public_movie(self):
         # Logic to select the public movie
