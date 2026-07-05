@@ -14,15 +14,11 @@ class Application(tk.Tk):
 
     def create_widgets(self):
 
-        img_bgr = cv2.imread("assets/img/sample3.jpg")
-        if img_bgr is None:
+        self.movie = cv2.VideoCapture("assets/movie/sample.mp4")
+        ret = self.movie.isOpened()
+        if not ret:
             img_pil = None
-        else:
-            img_bgr = cv2.resize(img_bgr, (427, 240))
-            img_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
-
-            img_pil = Image.fromarray(img_rgb)
-            self.img_tk = ImageTk.PhotoImage(img_pil)
+        img_pil = None
 
         # 中央ぞろえのために、グリッドの列と行の重みを設定
         self.grid_columnconfigure(0, weight=1)
@@ -44,7 +40,7 @@ class Application(tk.Tk):
         self.back.grid(row=0, column=0, pady=1)
 
         self.play_stop = tk.Button(
-            control_frame, text="再生/停止", command=self.on_button_click
+            control_frame, text="再生/停止", command=self.play_movie
         )
         self.play_stop.grid(row=0, column=1, pady=1)
 
@@ -83,6 +79,30 @@ class Application(tk.Tk):
 
     def on_button_click(self):
         print("Button clicked!")
+
+    def next_frame(self):
+        # Logic to go to the next frame
+        print("Next frame...")
+        ret, img_bgr = self.movie.read()
+        if not ret:
+            print("Error reading frame")
+            return
+        img_bgr = cv2.resize(img_bgr, (427, 240))
+        img_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
+
+        img_pil = Image.fromarray(img_rgb)
+        self.img_tk = ImageTk.PhotoImage(img_pil)
+
+        if img_pil is not None:
+            self.canvas.create_image(0, 0, anchor=tk.NW, image=self.img_tk)
+        self.canvas.grid(row=0, column=0, columnspan=3, pady=1)
+
+        self.after(33, self.next_frame)
+
+    def play_movie(self):
+        # Logic to play the movie
+        print("Playing movie...")
+        self.after(33, self.next_frame)
 
     def run(self):
         self.mainloop()
