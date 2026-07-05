@@ -1,7 +1,13 @@
 import tkinter as tk
+from logging import getLogger
+from tkinter import filedialog
 
 import cv2
 from PIL import Image, ImageTk
+
+from .system.convert import Convert
+from .system.file import File
+from .system.save import Save
 
 
 class Application(tk.Tk):
@@ -11,6 +17,8 @@ class Application(tk.Tk):
         self.geometry("500x340")
         self.resizable(False, False)
         self.create_widgets()
+        self.file = File()
+        self.logger = getLogger(__name__)
 
     def create_widgets(self):
 
@@ -53,7 +61,9 @@ class Application(tk.Tk):
         public_upload_frame.grid(row=2, column=0, padx=10, pady=1)
 
         self.upload_public_movie = tk.Button(
-            public_upload_frame, text="「公開動画」を選択", command=self.on_button_click
+            public_upload_frame,
+            text="「公開動画」を選択",
+            command=self.select_public_movie,
         )
         self.upload_public_movie.grid(row=0, column=0, columnspan=2, pady=1)
 
@@ -68,17 +78,75 @@ class Application(tk.Tk):
         self.upload_private_movie = tk.Button(
             private_upload_frame,
             text="「秘密動画」を選択",
-            command=self.on_button_click,
+            command=self.select_private_movie,
         )
         self.upload_private_movie.grid(row=0, column=0, columnspan=2, pady=1)
 
         self.convert = tk.Button(
-            private_upload_frame, text="変換", command=self.on_button_click
+            private_upload_frame, text="変換", command=self.convert_btn_click
         )
         self.convert.grid(row=0, column=2, padx=10, pady=1)
 
+    def select_public_movie(self):
+        # Logic to select the public movie
+        print("Selecting public movie...")
+        filename = filedialog.askopenfilename(
+            title="公開",
+            filetypes=(("MP4 files", "*.mp4"), ("All files", "*.*")),
+        )
+        self.file.set_public_movie_path(filename)
+
+    def select_private_movie(self):
+        # Logic to select the private movie
+        print("Selecting private movie...")
+        filename = filedialog.askopenfilename(
+            title="秘密",
+            filetypes=(("MP4 files", "*.mp4"), ("All files", "*.*")),
+        )
+        self.file.set_private_movie_path(filename)
+
     def on_button_click(self):
         print("Button clicked!")
+
+    def convert_btn_click(self):
+        # Logic to convert the video
+        print("Converting video...")
+        filename = filedialog.asksaveasfilename(
+            title="変換後の動画を保存",
+            defaultextension=".avi",
+            filetypes=(("AVI files", "*.avi"), ("All files", "*.*")),
+        )
+
+        # 動画の取得
+        public_movie = self.file.get_public_movie()
+        secret_movie = self.file.get_private_movie()
+
+        # 公開動画ファイル読み込みの確認
+        if public_movie is None:
+            self.logger.error("Public movie path is not set.")
+            return
+
+        # 秘密動画ファイル読み込みの確認
+        if secret_movie is None:
+            self.logger.error("Secret movie path is not set.")
+            return
+
+        # コンバーター
+        converter = Convert(
+            public_movie=public_movie,
+            private_movie=secret_movie,
+        )
+
+        status = converter._is_check()
+
+        if not status:
+            self.logger.error("Failed to open one or both videos.")
+            return
+
+        convert_data, width, height = converter.convert()
+
+        save = Save(filename=filename, fps=30, width=width, height=height)
+        save.save(convert_data)
 
     def next_frame(self):
         # Logic to go to the next frame
