@@ -57,7 +57,7 @@ class Application(tk.Tk):
         public_upload_frame.grid(row=2, column=0, padx=10, pady=1)
 
         self.upload_public_movie = tk.Button(
-            public_upload_frame, text="公開動画", command=self.on_button_click
+            public_upload_frame, text="「公開動画」を選択", command=self.on_button_click
         )
         self.upload_public_movie.grid(row=0, column=0, columnspan=2, pady=1)
 
@@ -70,7 +70,9 @@ class Application(tk.Tk):
         private_upload_frame.grid(row=3, column=0, padx=10, pady=1)
 
         self.upload_private_movie = tk.Button(
-            private_upload_frame, text="秘密動画", command=self.on_button_click
+            private_upload_frame,
+            text="「秘密動画」を選択",
+            command=self.on_button_click,
         )
         self.upload_private_movie.grid(row=0, column=0, columnspan=2, pady=1)
 
