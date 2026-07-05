@@ -17,7 +17,7 @@ class Application(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("PhantoMovie")
-        self.geometry("500x360")
+        self.geometry("500x365")
         self.resizable(False, False)
         self.create_widgets()
         self.file = File()
