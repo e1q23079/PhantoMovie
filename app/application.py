@@ -8,8 +8,10 @@ from tkinter import messagebox as MessageBox
 import cv2
 from PIL import Image, ImageTk
 
+from .system.analyze import Analyze
 from .system.convert import Convert
 from .system.file import File
+from .system.player import Player
 from .system.writer import Writer
 
 
@@ -21,14 +23,15 @@ class Application(tk.Tk):
         self.resizable(False, False)
         self.create_widgets()
         self.file = File()
+        self.movie = None
         self.logger = getLogger(__name__)
 
     def create_widgets(self):
 
-        self.movie = cv2.VideoCapture("output_diff.avi")
-        ret = self.movie.isOpened()
-        if not ret:
-            img_pil = None
+        # self.movie = cv2.VideoCapture("output_diff.avi")
+        # ret = self.movie.isOpened()
+        # if not ret:
+        #     img_pil = None
         img_pil = None
 
         # 中央ぞろえのために、グリッドの列と行の重みを設定
@@ -71,7 +74,7 @@ class Application(tk.Tk):
         self.upload_public_movie.grid(row=0, column=0, columnspan=2, pady=1)
 
         self.analyze = tk.Button(
-            public_upload_frame, text="解析", command=self.on_button_click
+            public_upload_frame, text="解析", command=self.analyze_btn_click
         )
         self.analyze.grid(row=0, column=2, padx=10, pady=1)
 
@@ -96,19 +99,26 @@ class Application(tk.Tk):
         self.progress = ttk.Progressbar(status_frame, mode="determinate", maximum=1)
         self.progress.pack(fill=tk.X, padx=10, pady=1)
 
-    def update_progress(self):
+    def update_progress_convert(self):
         progress = self.converter.get_progress()
         self.progress["value"] = progress
         self.update_idletasks()
         if progress < 1.0:
-            self.after(100, self.update_progress)
+            self.after(100, self.update_progress_convert)
+
+    def update_progress_analyze(self):
+        progress = self.analyzer.get_progress()
+        self.progress["value"] = progress
+        self.update_idletasks()
+        if progress < 1.0:
+            self.after(100, self.update_progress_analyze)
 
     def select_public_movie(self):
         # Logic to select the public movie
         print("Selecting public movie...")
         filename = filedialog.askopenfilename(
             title="公開",
-            filetypes=(("MP4 files", "*.mp4"), ("All files", "*.*")),
+            filetypes=(("Video files", "*.mp4 *.avi"), ("All files", "*.*")),
         )
         self.file.set_public_movie_path(filename)
 
@@ -117,7 +127,7 @@ class Application(tk.Tk):
         print("Selecting private movie...")
         filename = filedialog.askopenfilename(
             title="秘密",
-            filetypes=(("MP4 files", "*.mp4"), ("All files", "*.*")),
+            filetypes=(("Video files", "*.mp4 *.avi"), ("All files", "*.*")),
         )
         self.file.set_private_movie_path(filename)
 
@@ -132,6 +142,37 @@ class Application(tk.Tk):
         )
         writer.save(convert_data)
         MessageBox.showinfo("変換完了", "動画の変換が完了しました。")
+
+    def analyze_thread(self):
+        analyze_data = self.analyzer.analyze()
+        self.movie = Player(frames=analyze_data.get_frames())
+        MessageBox.showinfo("解析完了", "動画の解析が完了しました。")
+
+    def analyze_btn_click(self):
+        # Logic to analyze the video
+        print("Analyzing video...")
+
+        # 公開動画の取得
+        public_movie = self.file.get_public_movie()
+
+        # 公開動画ファイル読み込みの確認
+        if public_movie is None:
+            self.logger.error("Public movie path is not set.")
+            return
+
+        # アナライザー
+        self.analyzer = Analyze(public_movie=public_movie)
+
+        status = self.analyzer._is_check()
+
+        if not status:
+            self.logger.error("Failed to open the public video.")
+            return
+
+        thread = threading.Thread(target=self.analyze_thread)
+        thread.start()
+
+        self.after(100, self.update_progress_analyze)
 
     def convert_btn_click(self):
         # Logic to convert the video
@@ -171,14 +212,20 @@ class Application(tk.Tk):
         thread = threading.Thread(target=self.convert_thread)
         thread.start()
 
-        self.after(100, self.update_progress)
+        self.after(100, self.update_progress_convert)
 
     def next_frame(self):
         # Logic to go to the next frame
         print("Next frame...")
-        ret, img_bgr = self.movie.read()
+        if self.movie is None:
+            print("Movie is not loaded.")
+            return
+        ret, img_bgr = self.movie.get_frame()
         if not ret:
             print("Error reading frame")
+            return
+        if img_bgr is None:
+            print("No more frames to display.")
             return
         img_bgr = cv2.resize(img_bgr, (427, 240))
         img_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)

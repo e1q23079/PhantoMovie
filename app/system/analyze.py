@@ -14,6 +14,18 @@ class Analyze:
         self.logger = getLogger(__name__)
         self.data = Data()
 
+    def _is_check(self):
+        """
+        動画が正しく読み込まれているかを確認するメソッド
+
+        Returns:
+            bool: 動画が正しく読み込まれている場合はTrue、そうでない場合はFalse
+        """
+        if not self.public_movie.isOpened():
+            self.logger.error("Failed to open public movie.")
+            return False
+        return True
+
     def get_total_frames(self):
         """
         動画の総フレーム数を取得するメソッド
