@@ -29,28 +29,25 @@ class Application(tk.Tk):
         self.protocol("WM_DELETE_WINDOW", self.on_exit)
 
     def create_widgets(self):
-
-        # self.movie = cv2.VideoCapture("output_diff.avi")
-        # ret = self.movie.isOpened()
-        # if not ret:
-        #     img_pil = None
-        img_pil = None
-
+        """
+        ウィジェットの作成と配置
+        """
         # 中央ぞろえのために、グリッドの列と行の重みを設定
         self.grid_columnconfigure(0, weight=1)
 
+        # 動画フレーム
         movie_frame = tk.Frame(self)
         movie_frame.grid(row=0, column=0, padx=10, pady=1)
-
-        control_frame = tk.Frame(self)
-        control_frame.grid(row=1, column=0, padx=10, pady=1)
 
         self.canvas = tk.Canvas(
             movie_frame, width=427, height=240, bg="black", bd=0, highlightthickness=0
         )
-        if img_pil is not None:
-            self.canvas.create_image(0, 0, anchor=tk.NW, image=self.img_tk)
+        self.canvas.create_image(0, 0, anchor=tk.NW)
         self.canvas.grid(row=0, column=0, columnspan=3, pady=1)
+
+        # コントロールフレーム
+        control_frame = tk.Frame(self)
+        control_frame.grid(row=1, column=0, padx=10, pady=1)
 
         self.back = tk.Button(control_frame, text="戻る", command=self.on_button_click)
         self.back.grid(row=0, column=0, pady=1)
@@ -65,6 +62,7 @@ class Application(tk.Tk):
         )
         self.forward.grid(row=0, column=2, pady=1)
 
+        # 公開動画アップロードフレーム
         public_upload_frame = tk.Frame(self)
         public_upload_frame.grid(row=2, column=0, padx=10, pady=1)
 
@@ -80,6 +78,7 @@ class Application(tk.Tk):
         )
         self.analyze.grid(row=0, column=2, padx=10, pady=1)
 
+        # 秘密動画アップロードフレーム
         private_upload_frame = tk.Frame(self)
         private_upload_frame.grid(row=3, column=0, padx=10, pady=1)
 
@@ -95,6 +94,7 @@ class Application(tk.Tk):
         )
         self.convert.grid(row=0, column=2, padx=10, pady=1)
 
+        # 進捗バーフレーム
         status_frame = tk.Frame(self)
         status_frame.grid(row=4, column=0, padx=10, pady=1, sticky=tk.W + tk.E)
 
@@ -102,6 +102,9 @@ class Application(tk.Tk):
         self.progress.pack(fill=tk.X, padx=10, pady=1)
 
     def update_progress_convert(self):
+        """
+        進捗バーの更新（変換処理用）
+        """
         progress = self.converter.get_progress()
         self.progress["value"] = progress
         self.update_idletasks()
@@ -109,6 +112,9 @@ class Application(tk.Tk):
             self.after(100, self.update_progress_convert)
 
     def update_progress_analyze(self):
+        """
+        進捗バーの更新（解析処理用）
+        """
         progress = self.analyzer.get_progress()
         self.progress["value"] = progress
         self.update_idletasks()
@@ -116,7 +122,9 @@ class Application(tk.Tk):
             self.after(100, self.update_progress_analyze)
 
     def select_public_movie(self):
-        # Logic to select the public movie
+        """
+        アップロードする公開動画を選択するためのファイルダイアログを開く
+        """
         print("Selecting public movie...")
         filename = filedialog.askopenfilename(
             title="公開",
@@ -125,7 +133,9 @@ class Application(tk.Tk):
         self.file.set_public_movie_path(filename)
 
     def select_private_movie(self):
-        # Logic to select the private movie
+        """
+        アップロードする秘密動画を選択するためのファイルダイアログを開く
+        """
         print("Selecting private movie...")
         filename = filedialog.askopenfilename(
             title="秘密",
@@ -134,9 +144,15 @@ class Application(tk.Tk):
         self.file.set_private_movie_path(filename)
 
     def on_button_click(self):
+        """
+        ボタンがクリックされたときの処理
+        """
         print("Button clicked!")
 
     def convert_thread(self):
+        """
+        変換処理を別スレッドで実行する
+        """
         convert_data, width, height = self.converter.convert()
 
         writer = Writer(
@@ -150,6 +166,9 @@ class Application(tk.Tk):
             self.secret_movie.release()
 
     def analyze_thread(self):
+        """
+        解析処理を別スレッドで実行する
+        """
         analyze_data = self.analyzer.analyze()
         self.movie = Player(frames=analyze_data.get_frames())
         MessageBox.showinfo("解析完了", "動画の解析が完了しました。")
@@ -157,7 +176,9 @@ class Application(tk.Tk):
             self.public_movie.release()
 
     def analyze_btn_click(self):
-        # Logic to analyze the video
+        """ "
+        解析ボタンがクリックされたときの処理
+        """
         print("Analyzing video...")
 
         # 公開動画の取得
@@ -183,7 +204,9 @@ class Application(tk.Tk):
         self.after(100, self.update_progress_analyze)
 
     def convert_btn_click(self):
-        # Logic to convert the video
+        """ "
+        変換ボタンがクリックされたときの処理
+        """
         print("Converting video...")
         self.output_filename = filedialog.asksaveasfilename(
             title="変換後の動画を保存",
@@ -227,7 +250,9 @@ class Application(tk.Tk):
         self.after(100, self.update_progress_convert)
 
     def next_frame(self):
-        # Logic to go to the next frame
+        """
+        次のフレームを表示する
+        """
         print("Next frame...")
         if self.movie is None:
             print("Movie is not loaded.")
@@ -252,17 +277,25 @@ class Application(tk.Tk):
         self.after(33, self.next_frame)
 
     def play_movie(self):
-        # Logic to play the movie
+        """
+        動画を再生する
+        """
         print("Playing movie...")
         self.after(33, self.next_frame)
 
     # ウィンドウ終了時の処理
     def on_exit(self):
+        """
+        ウィンドウ終了時の処理
+        """
         ret = MessageBox.askokcancel("確認", "本当に終了しますか？")
         if ret:
             self.destroy()
 
     def run(self):
+        """
+        アプリケーションを実行する
+        """
         self.mainloop()
 
 
