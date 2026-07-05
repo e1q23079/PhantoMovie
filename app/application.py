@@ -82,7 +82,10 @@ class Application(tk.Tk):
     def on_button_click(self):
         print("Button clicked!")
 
+    def run(self):
+        self.mainloop()
+
 
 if __name__ == "__main__":
     app = Application()
-    app.mainloop()
+    app.run()
