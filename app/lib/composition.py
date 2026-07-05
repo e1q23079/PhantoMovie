@@ -6,12 +6,15 @@ from ..lib.img import IMG
 
 
 class Composition:
+    """
+    画像を合成するクラス
+    """
+
     def __init__(self, img1: np.ndarray, img2: np.ndarray):
         """
         画像を合成するクラス
         :param img1: 1枚目の画像データ
         :param img2: 2枚目の画像データ
-        :param formula: 画像処理の式
         """
         self.img1 = IMG(img1)
         self.height = self.img1.height
@@ -22,14 +25,14 @@ class Composition:
         self.img2 = IMG(temp_img2)
         self.formula = Formula(self.img1, self.img2)
 
-    def get_pixels_num(self):
+    def get_pixels_num(self) -> int:
         """
         画像のピクセル数を取得する
         :return: 画像のピクセル数
         """
         return self.width * self.height
 
-    def progress(self, current_frame, total_frames):
+    def progress(self, current_frame: int, total_frames: int) -> float:
         """
         進捗状況を計算する
         :param current_frame: 現在のフレーム数
@@ -40,7 +43,7 @@ class Composition:
             return 0
         return (current_frame / total_frames) * 100
 
-    def get_compose(self):
+    def get_compose(self) -> np.ndarray:
         """
         画像を合成する
         :return: 合成された画像
@@ -54,14 +57,14 @@ class Composition:
                 result[y, x] = pixel
         return result
 
-    def get_width(self):
+    def get_width(self) -> int:
         """
         画像の幅を取得する
         :return: 画像の幅
         """
         return self.width
 
-    def get_height(self):
+    def get_height(self) -> int:
         """
         画像の高さを取得する
         :return: 画像の高さ

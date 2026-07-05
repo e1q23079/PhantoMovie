@@ -5,6 +5,10 @@ from ..lib.img import IMG
 
 
 class Diff:
+    """
+    画像の差分を計算するクラス
+    """
+
     def __init__(self, img: np.ndarray):
         """
         画像の差分を計算するクラス

@@ -22,7 +22,7 @@ class Convert:
         self.logger = getLogger(__name__)
         self.data = Data()
 
-    def _is_check(self):
+    def _is_check(self) -> bool:
         """
         動画が正しく読み込まれているかを確認するメソッド
 
@@ -37,7 +37,7 @@ class Convert:
             return False
         return True
 
-    def get_total_frames(self):
+    def get_total_frames(self) -> int:
         """
         動画の総フレーム数を取得するメソッド
 
@@ -48,7 +48,7 @@ class Convert:
         private_total_frames = int(self.private_movie.get(cv2.CAP_PROP_FRAME_COUNT))
         return min(public_total_frames, private_total_frames)
 
-    def get_progress(self):
+    def get_progress(self) -> float:
         """
         変換の進捗状況を取得するメソッド
 
@@ -59,7 +59,7 @@ class Convert:
             return 0.0
         return self.current_frame / self.total_frames
 
-    def convert(self):
+    def convert(self) -> tuple[list, int, int]:
         """
         動画の変換処理を行うメソッド
         """
