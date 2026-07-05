@@ -3,7 +3,7 @@ from logging import getLogger
 import cv2
 
 from ..lib.diff import Diff
-from ..system.data import Data
+from ..service.data import Data
 
 
 class Analyze:

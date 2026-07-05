@@ -8,11 +8,11 @@ from tkinter import messagebox as MessageBox
 import cv2
 from PIL import Image, ImageTk
 
-from .system.analyze import Analyze
-from .system.convert import Convert
-from .system.file import File
-from .system.player import Player
-from .system.writer import Writer
+from .model.file import File
+from .service.analyze import Analyze
+from .service.convert import Convert
+from .service.player import Player
+from .service.writer import Writer
 
 
 class Application(tk.Tk):
