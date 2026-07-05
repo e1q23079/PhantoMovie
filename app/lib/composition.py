@@ -14,6 +14,8 @@ class Composition:
         :param formula: 画像処理の式
         """
         self.img1 = IMG(img1)
+        self.height = self.img1.height
+        self.width = self.img1.width
         temp_img2 = cv2.resize(img2, (self.img1.width, self.img1.height))
         self.img2 = IMG(temp_img2)
         self.formula = Formula(self.img1, self.img2)
@@ -31,3 +33,17 @@ class Composition:
                 pixel = self.formula(x, y)
                 result[y, x] = pixel
         return result
+
+    def get_width(self):
+        """
+        画像の幅を取得する
+        :return: 画像の幅
+        """
+        return self.width
+
+    def get_height(self):
+        """
+        画像の高さを取得する
+        :return: 画像の高さ
+        """
+        return self.height

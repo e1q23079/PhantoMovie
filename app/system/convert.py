@@ -1,0 +1,71 @@
+from logging import getLogger
+
+import cv2
+
+from ..lib.composition import Composition
+from ..system.data import Data
+
+
+class Convert:
+    """
+    Convertクラスは、公開動画と秘密動画を受け取り、動画の合成や差分の計算を行うためのクラス
+    """
+
+    def __init__(self, public_movie: cv2.VideoCapture, private_movie: cv2.VideoCapture):
+        """
+        Convertクラスの初期化
+        """
+        self.public_movie = public_movie
+        self.private_movie = private_movie
+        self.logger = getLogger(__name__)
+        self.data = Data()
+
+    def _is_check(self):
+        """
+        動画が正しく読み込まれているかを確認するメソッド
+
+        Returns:
+            bool: 動画が正しく読み込まれている場合はTrue、そうでない場合はFalse
+        """
+        if not self.public_movie.isOpened():
+            self.logger.error("Failed to open public movie.")
+            return False
+        if not self.private_movie.isOpened():
+            self.logger.error("Failed to open private movie.")
+            return False
+        return True
+
+    def convert(self):
+        """
+        動画の変換処理を行うメソッド
+        """
+        while True:
+            # 公開動画のフレームを取得
+            ret1, public_frame = self.public_movie.read()
+            if not ret1:
+                self.logger.error("Failed to read frame from public video.")
+                break
+
+            # 秘密動画のフレームを取得
+            ret2, secret_frame = self.private_movie.read()
+            if not ret2:
+                self.logger.error("Failed to read frame from secret video.")
+                break
+
+            # リサイズ
+            public_frame = cv2.resize(public_frame, (427, 240))
+            secret_frame = cv2.resize(secret_frame, (427, 240))
+
+            # 画像の合成
+            composition = Composition(public_frame, secret_frame)
+            compose_result = composition.get_compose()
+
+            # データの書き込み
+            self.data.add_frame(compose_result)
+            print(".", end="", flush=True)
+
+        return (
+            self.data.get_frames(),
+            composition.get_width(),
+            composition.get_height(),
+        )

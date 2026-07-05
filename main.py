@@ -1,7 +1,7 @@
 import logging
 from logging import getLogger
 
-from app.application import Application
+from app import app
 
 
 def main():
@@ -10,12 +10,11 @@ def main():
     """
     logging.basicConfig(
         level=logging.DEBUG,
-        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        format="%(asctime)s - %(filename)s - %(lineno)d - %(name)s - %(levelname)s - %(message)s",
     )
     logger = getLogger(__name__)
     logger.debug("Main function is running.")
-    app = Application()
-    app.run()
+    app.app()
 
 
 if __name__ == "__main__":
