@@ -23,7 +23,7 @@ class Application(tk.Tk):
         self.resizable(False, False)
         self.create_widgets()
         self.file = File()
-        self.movie = None
+        self.player = None
         self.logger = getLogger(__name__)
         # ウィンドウ終了時のイベントバインド
         self.protocol("WM_DELETE_WINDOW", self.on_exit)
@@ -49,16 +49,18 @@ class Application(tk.Tk):
         control_frame = tk.Frame(self)
         control_frame.grid(row=1, column=0, padx=10, pady=1)
 
-        self.back = tk.Button(control_frame, text="戻る", command=self.on_button_click)
+        self.back = tk.Button(
+            control_frame, text="戻る", command=self.play_backward_movie
+        )
         self.back.grid(row=0, column=0, pady=1)
 
         self.play_stop = tk.Button(
-            control_frame, text="再生/停止", command=self.play_movie
+            control_frame, text="再生/停止", command=self.play_stop_btn
         )
         self.play_stop.grid(row=0, column=1, pady=1)
 
         self.forward = tk.Button(
-            control_frame, text="進む", command=self.on_button_click
+            control_frame, text="進む", command=self.play_forward_movie
         )
         self.forward.grid(row=0, column=2, pady=1)
 
@@ -170,7 +172,7 @@ class Application(tk.Tk):
         解析処理を別スレッドで実行する
         """
         analyze_data = self.analyzer.analyze()
-        self.movie = Player(frames=analyze_data.get_frames())
+        self.player = Player(frames=analyze_data.get_frames())
         MessageBox.showinfo("解析完了", "動画の解析が完了しました。")
         if self.public_movie is not None:
             self.public_movie.release()
@@ -254,11 +256,16 @@ class Application(tk.Tk):
         次のフレームを表示する
         """
         print("Next frame...")
-        if self.movie is None:
+        if self.player is None:
             print("Movie is not loaded.")
             return
-        ret, img_bgr = self.movie.get_frame()
+        if self.player.get_is_playing() is False:
+            print("Movie is not playing.")
+            return
+        ret, img_bgr = self.player.get_frame()
         if not ret:
+            self.player.reset_current_frame_index()
+            self.player.stop_movie()
             print("Error reading frame")
             return
         if img_bgr is None:
@@ -276,12 +283,61 @@ class Application(tk.Tk):
 
         self.after(33, self.next_frame)
 
+    def play_stop_btn(self):
+        """
+        再生/停止ボタンがクリックされたときの処理
+        """
+        print("Play/Stop button clicked...")
+        if self.player is None:
+            print("Movie is not loaded.")
+            return
+        if self.player.get_is_playing():
+            self.stop_movie()
+        else:
+            self.play_movie()
+
+    def stop_movie(self):
+        """
+        動画を停止する
+        """
+        print("Stopping movie...")
+        if self.player is None:
+            print("Movie is not loaded.")
+            return
+        self.player.stop_movie()
+
     def play_movie(self):
         """
         動画を再生する
         """
         print("Playing movie...")
+        if self.player is None:
+            print("Movie is not loaded.")
+            return
+        self.player.play_movie()
         self.after(33, self.next_frame)
+
+    def play_forward_movie(self):
+        """
+        動画を早送りする
+        """
+        print("Forwarding movie...")
+        if self.player is None:
+            print("Movie is not loaded.")
+            return
+        self.player.forward_movie()
+        self.next_frame()
+
+    def play_backward_movie(self):
+        """
+        動画を巻き戻す
+        """
+        print("Rewinding movie...")
+        if self.player is None:
+            print("Movie is not loaded.")
+            return
+        self.player.backward_movie()
+        self.next_frame()
 
     # ウィンドウ終了時の処理
     def on_exit(self):
