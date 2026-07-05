@@ -1,7 +1,8 @@
 import logging
 from logging import getLogger
 
-from app import app
+# from app import app
+from app.application import Application
 
 
 def main():
@@ -14,7 +15,9 @@ def main():
     )
     logger = getLogger(__name__)
     logger.debug("Main function is running.")
-    app.app()
+    # app.app()
+    app = Application()
+    app.run()
 
 
 if __name__ == "__main__":

@@ -14,7 +14,7 @@ class Application(tk.Tk):
 
     def create_widgets(self):
 
-        self.movie = cv2.VideoCapture("assets/movie/sample.mp4")
+        self.movie = cv2.VideoCapture("output_diff.avi")
         ret = self.movie.isOpened()
         if not ret:
             img_pil = None
