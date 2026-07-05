@@ -1,7 +1,7 @@
 import cv2
 
 
-class Save:
+class Writer:
     def __init__(self, filename: str, fps: int, width: int, height: int):
         self.codec = cv2.VideoWriter.fourcc(*"FFV1")  # コーデックの指定
         self.video = cv2.VideoWriter(filename, self.codec, fps, (width, height))

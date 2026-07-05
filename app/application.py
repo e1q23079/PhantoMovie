@@ -1,14 +1,16 @@
+import threading
 import tkinter as tk
 import tkinter.ttk as ttk
 from logging import getLogger
 from tkinter import filedialog
+from tkinter import messagebox as MessageBox
 
 import cv2
 from PIL import Image, ImageTk
 
 from .system.convert import Convert
 from .system.file import File
-from .system.save import Save
+from .system.writer import Writer
 
 
 class Application(tk.Tk):
@@ -91,12 +93,15 @@ class Application(tk.Tk):
         status_frame = tk.Frame(self)
         status_frame.grid(row=4, column=0, padx=10, pady=1, sticky=tk.W + tk.E)
 
-        self.progress = ttk.Progressbar(status_frame, mode="determinate", maximum=100)
+        self.progress = ttk.Progressbar(status_frame, mode="determinate", maximum=1)
         self.progress.pack(fill=tk.X, padx=10, pady=1)
 
-    def update_progress(self, value):
-        self.progress["value"] = value
+    def update_progress(self):
+        progress = self.converter.get_progress()
+        self.progress["value"] = progress
         self.update_idletasks()
+        if progress < 1.0:
+            self.after(100, self.update_progress)
 
     def select_public_movie(self):
         # Logic to select the public movie
@@ -119,10 +124,19 @@ class Application(tk.Tk):
     def on_button_click(self):
         print("Button clicked!")
 
+    def convert_thread(self):
+        convert_data, width, height = self.converter.convert()
+
+        writer = Writer(
+            filename=self.output_filename, fps=30, width=width, height=height
+        )
+        writer.save(convert_data)
+        MessageBox.showinfo("変換完了", "動画の変換が完了しました。")
+
     def convert_btn_click(self):
         # Logic to convert the video
         print("Converting video...")
-        filename = filedialog.asksaveasfilename(
+        self.output_filename = filedialog.asksaveasfilename(
             title="変換後の動画を保存",
             defaultextension=".avi",
             filetypes=(("AVI files", "*.avi"), ("All files", "*.*")),
@@ -143,21 +157,21 @@ class Application(tk.Tk):
             return
 
         # コンバーター
-        converter = Convert(
+        self.converter = Convert(
             public_movie=public_movie,
             private_movie=secret_movie,
         )
 
-        status = converter._is_check()
+        status = self.converter._is_check()
 
         if not status:
             self.logger.error("Failed to open one or both videos.")
             return
 
-        convert_data, width, height = converter.convert()
+        thread = threading.Thread(target=self.convert_thread)
+        thread.start()
 
-        save = Save(filename=filename, fps=30, width=width, height=height)
-        save.save(convert_data)
+        self.after(100, self.update_progress)
 
     def next_frame(self):
         # Logic to go to the next frame

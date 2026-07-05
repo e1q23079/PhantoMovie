@@ -44,7 +44,20 @@ class Convert:
         Returns:
             int: 総フレーム数
         """
-        return int(self.public_movie.get(cv2.CAP_PROP_FRAME_COUNT))
+        public_total_frames = int(self.public_movie.get(cv2.CAP_PROP_FRAME_COUNT))
+        private_total_frames = int(self.private_movie.get(cv2.CAP_PROP_FRAME_COUNT))
+        return min(public_total_frames, private_total_frames)
+
+    def get_progress(self):
+        """
+        変換の進捗状況を取得するメソッド
+
+        Returns:
+            float: 進捗状況（0.0から1.0の範囲）
+        """
+        if self.total_frames == 0:
+            return 0.0
+        return self.current_frame / self.total_frames
 
     def convert(self):
         """

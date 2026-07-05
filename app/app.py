@@ -6,7 +6,7 @@ from .lib.diff import Diff
 from .system.analyze import Analyze
 from .system.convert import Convert
 from .system.file import File
-from .system.save import Save
+from .system.writer import Writer
 
 
 def app():
@@ -49,7 +49,7 @@ def app():
 
     convert_data, width, height = converter.convert()
 
-    save = Save(filename="output.avi", fps=30, width=width, height=height)
+    save = Writer(filename="output.avi", fps=30, width=width, height=height)
     save.save(convert_data)
 
     file2 = File()
@@ -65,7 +65,7 @@ def app():
     analyzer = Analyze(public_movie=public_movie2)
     analysis_data = analyzer.analyze()
 
-    save2 = Save(filename="output_diff.avi", fps=30, width=width, height=height)
+    save2 = Writer(filename="output_diff.avi", fps=30, width=width, height=height)
     save2.save(analysis_data.get_frames())
 
     # テスト
