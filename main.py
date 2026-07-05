@@ -9,12 +9,11 @@ def main():
     アプリケーションのメイン関数
     """
     logging.basicConfig(
-        level=logging.INFO,
+        level=logging.DEBUG,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     )
     logger = getLogger(__name__)
-    print("Starting the application...")
-    logger.info("Main function is running.")
+    logger.debug("Main function is running.")
     app = Application()
     app.run()
 
