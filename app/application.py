@@ -25,6 +25,8 @@ class Application(tk.Tk):
         self.file = File()
         self.movie = None
         self.logger = getLogger(__name__)
+        # ウィンドウ終了時のイベントバインド
+        self.protocol("WM_DELETE_WINDOW", self.on_exit)
 
     def create_widgets(self):
 
@@ -243,6 +245,12 @@ class Application(tk.Tk):
         # Logic to play the movie
         print("Playing movie...")
         self.after(33, self.next_frame)
+
+    # ウィンドウ終了時の処理
+    def on_exit(self):
+        ret = MessageBox.askokcancel("確認", "本当に終了しますか？")
+        if ret:
+            self.destroy()
 
     def run(self):
         self.mainloop()
