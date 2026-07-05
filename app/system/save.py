@@ -3,7 +3,7 @@ import cv2
 
 class Save:
     def __init__(self, filename: str, fps: int, width: int, height: int):
-        self.codec = cv2.VideoWriter.fourcc(*"mp4v")  # コーデックの指定
+        self.codec = cv2.VideoWriter.fourcc(*"MJPG")  # コーデックの指定
         self.video = cv2.VideoWriter(filename, self.codec, fps, (width, height))
 
     def save(self, frames):

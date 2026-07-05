@@ -1,5 +1,9 @@
 from logging import getLogger
 
+import cv2
+
+from .lib.diff import Diff
+from .system.analyze import Analyze
 from .system.convert import Convert
 from .system.file import File
 from .system.save import Save
@@ -43,10 +47,39 @@ def app():
         logger.error("Failed to open one or both videos.")
         return
 
-    data, width, height = converter.convert()
+    convert_data, width, height = converter.convert()
 
-    save = Save(filename="output.mp4", fps=30, width=width, height=height)
-    save.save(data)
+    save = Save(filename="output.avi", fps=30, width=width, height=height)
+    save.save(convert_data)
+
+    file2 = File()
+    file2.set_public_movie_path("output.avi")
+
+    # 公開動画の取得
+    public_movie2 = file2.get_public_movie()
+
+    if public_movie2 is None:
+        logger.error("Failed to get public movie.")
+        return
+
+    analyzer = Analyze(public_movie=public_movie2)
+    analysis_data = analyzer.analyze()
+
+    save2 = Save(filename="output_diff.avi", fps=30, width=width, height=height)
+    save2.save(analysis_data.get_frames())
+
+    # テスト
+    for frame in convert_data:
+        # 画像の表示
+        diff = Diff(frame)
+        diff_result = diff.get_diff()
+        cv2.imshow("Composed Image", frame)
+        cv2.imshow("Diff Image", diff_result)
+
+        fps = public_movie.get(cv2.CAP_PROP_FPS)
+        key = cv2.waitKey(int(1000 / fps))
+        if key == 27:  # ESC key
+            break
 
     # while True:
     #     # 公開動画のフレームを取得
