@@ -144,26 +144,32 @@ class Application(tk.Tk):
         )
         writer.save(convert_data)
         MessageBox.showinfo("変換完了", "動画の変換が完了しました。")
+        if self.public_movie is not None:
+            self.public_movie.release()
+        if self.secret_movie is not None:
+            self.secret_movie.release()
 
     def analyze_thread(self):
         analyze_data = self.analyzer.analyze()
         self.movie = Player(frames=analyze_data.get_frames())
         MessageBox.showinfo("解析完了", "動画の解析が完了しました。")
+        if self.public_movie is not None:
+            self.public_movie.release()
 
     def analyze_btn_click(self):
         # Logic to analyze the video
         print("Analyzing video...")
 
         # 公開動画の取得
-        public_movie = self.file.get_public_movie()
+        self.public_movie = self.file.get_public_movie()
 
         # 公開動画ファイル読み込みの確認
-        if public_movie is None:
+        if self.public_movie is None:
             self.logger.error("Public movie path is not set.")
             return
 
         # アナライザー
-        self.analyzer = Analyze(public_movie=public_movie)
+        self.analyzer = Analyze(public_movie=self.public_movie)
 
         status = self.analyzer._is_check()
 
@@ -185,24 +191,28 @@ class Application(tk.Tk):
             filetypes=(("AVI files", "*.avi"), ("All files", "*.*")),
         )
 
+        if not self.output_filename:
+            self.logger.error("No output filename specified.")
+            return
+
         # 動画の取得
-        public_movie = self.file.get_public_movie()
-        secret_movie = self.file.get_private_movie()
+        self.public_movie = self.file.get_public_movie()
+        self.secret_movie = self.file.get_private_movie()
 
         # 公開動画ファイル読み込みの確認
-        if public_movie is None:
+        if self.public_movie is None:
             self.logger.error("Public movie path is not set.")
             return
 
         # 秘密動画ファイル読み込みの確認
-        if secret_movie is None:
+        if self.secret_movie is None:
             self.logger.error("Secret movie path is not set.")
             return
 
         # コンバーター
         self.converter = Convert(
-            public_movie=public_movie,
-            private_movie=secret_movie,
+            public_movie=self.public_movie,
+            private_movie=self.secret_movie,
         )
 
         status = self.converter._is_check()
