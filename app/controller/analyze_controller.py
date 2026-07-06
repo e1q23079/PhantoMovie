@@ -61,6 +61,7 @@ class AnalyzeController:
         # 公開動画ファイル読み込みの確認
         if self.public_movie is None:
             logger.error("Public movie path is not set.")
+            MessageBox.showerror("エラー", "「公開動画」が選択されていません。")
             return
 
         # アナライザー
@@ -70,6 +71,7 @@ class AnalyzeController:
 
         if not status:
             logger.error("Failed to open the public video.")
+            MessageBox.showerror("エラー", "「公開動画」の読み込みに失敗しました。")
             return
 
         thread = threading.Thread(target=self.analyze_thread)

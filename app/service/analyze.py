@@ -1,4 +1,5 @@
 from logging import getLogger
+from tkinter import messagebox as MessageBox
 
 import cv2
 
@@ -34,6 +35,7 @@ class Analyze:
         """
         if not self.public_movie.isOpened():
             logger.error("Failed to open public movie.")
+            MessageBox.showerror("エラー", "「公開動画」の読み込みに失敗しました。")
             return False
         return True
 

@@ -72,11 +72,13 @@ class ConvertController:
         # 公開動画ファイル読み込みの確認
         if self.public_movie is None:
             logger.error("Public movie path is not set.")
+            MessageBox.showerror("エラー", "「公開動画」が選択されていません。")
             return
 
         # 秘密動画ファイル読み込みの確認
         if self.secret_movie is None:
             logger.error("Secret movie path is not set.")
+            MessageBox.showerror("エラー", "「秘密動画」が選択されていません。")
             return
 
         # コンバーター
@@ -89,6 +91,7 @@ class ConvertController:
 
         if not status:
             logger.error("Failed to open one or both videos.")
+            MessageBox.showerror("エラー", "動画の読み込みに失敗しました。")
             return
 
         thread = threading.Thread(target=self.convert_thread)

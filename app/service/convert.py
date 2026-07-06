@@ -1,4 +1,5 @@
 from logging import getLogger
+from tkinter import messagebox as MessageBox
 
 import cv2
 
@@ -32,9 +33,11 @@ class Convert:
         """
         if not self.public_movie.isOpened():
             logger.error("Failed to open public movie.")
+            MessageBox.showerror("エラー", "「公開動画」の読み込みに失敗しました。")
             return False
         if not self.private_movie.isOpened():
             logger.error("Failed to open private movie.")
+            MessageBox.showerror("エラー", "「秘密動画」の読み込みに失敗しました。")
             return False
         return True
 
