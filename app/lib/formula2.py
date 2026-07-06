@@ -20,7 +20,7 @@ class Formula:
         """
         入力された値を分類する
         """
-        wide = 255 / 8
+        wide = int(255 / 8)
         if value < wide:
             return 0
         elif value < wide * 2:
