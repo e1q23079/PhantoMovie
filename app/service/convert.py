@@ -3,7 +3,7 @@ from tkinter import messagebox as MessageBox
 
 import cv2
 
-from ..lib.composition import Composition
+from ..lib.composition2 import Composition
 from ..service.data import Data
 
 logger = getLogger(__name__)

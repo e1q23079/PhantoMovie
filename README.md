@@ -15,6 +15,25 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
+## 埋め込む下位ビット数の変更
+
+下記の使用するライブラリを書き換えることで，秘密鍵を埋め込むビット数の変更する
+
+- `diff`・`composition`：LSB（下位1ビット）
+- `diff2`・`composition2`：下位4ビット
+
+`app\service\convert.py`
+
+```py
+from ..lib.diff2 import Diff
+```
+
+`app\service\analyze.py`
+
+```py
+from ..lib.composition2 import Composition
+```
+
 ## アプリケーションの実行
 
 以下のコマンドを実行して，アプリケーションを起動する．
