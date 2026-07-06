@@ -9,7 +9,7 @@ def main():
     アプリケーションのメイン関数
     """
     logging.basicConfig(
-        level=logging.DEBUG,
+        level=logging.CRITICAL,
         format="%(asctime)s - %(filename)s - %(lineno)d - %(name)s - %(levelname)s - %(message)s",
     )
     logger = getLogger(__name__)
