@@ -45,6 +45,7 @@ class ConvertController:
         writer.save(convert_data)
         MessageBox.showinfo("変換完了", "動画の変換が完了しました。")
         self.main_window.all_btn_state("normal")
+        self.main_window.player_btn_state("disabled")
         if self.public_movie is not None:
             self.public_movie.release()
         if self.secret_movie is not None:
