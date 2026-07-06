@@ -3,6 +3,8 @@ from logging import getLogger
 from tkinter import messagebox as MessageBox
 from typing import TYPE_CHECKING
 
+import cv2
+
 from ..service.analyze import Analyze
 from ..service.data import Data
 from ..service.player import Player
@@ -63,6 +65,8 @@ class AnalyzeController:
             logger.error("Public movie path is not set.")
             MessageBox.showerror("エラー", "「公開動画」が選択されていません。")
             return
+
+        self.player.set_fps(self.public_movie.get(cv2.CAP_PROP_FPS))
 
         # アナライザー
         self.analyzer = Analyze(public_movie=self.public_movie)

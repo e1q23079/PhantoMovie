@@ -63,7 +63,7 @@ class PlayerController:
 
         self.render_frame(img_bgr)
 
-        self.main_window.after(33, self.next_frame)
+        self.main_window.after(int(1000 / self.player.get_fps()), self.next_frame)
 
     def play_stop_btn(self):
         """
@@ -97,7 +97,7 @@ class PlayerController:
             logger.error("Movie is not loaded.")
             return
         self.player.play_movie()
-        self.main_window.after(33, self.next_frame)
+        self.main_window.after(int(1000 / self.player.get_fps()), self.next_frame)
 
     def play_forward_movie(self):
         """

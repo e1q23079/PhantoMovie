@@ -17,7 +17,8 @@ class Player:
         :param frames: 動画のフレームを格納するリスト"""
         self.is_playing = False
         self.current_frame_index = 0
-        self.frames = []  # This will hold the frames of the movie
+        self.frames = []  # This will hold the frames of the movie]
+        self.fps = 30.0  # Default FPS, can be set later based on the video
 
     def set_frames(self, frames: list[numpy.ndarray]):
         """
@@ -92,3 +93,17 @@ class Player:
         self.current_frame_index = min(
             len(self.frames) - 1, self.current_frame_index + 10
         )
+
+    def set_fps(self, fps: float):
+        """
+        動画のフレームレートを設定する
+        :param fps: 動画のフレームレート
+        """
+        self.fps = fps
+
+    def get_fps(self) -> float:
+        """
+        動画のフレームレートを取得する
+        :return: 動画のフレームレート
+        """
+        return self.fps

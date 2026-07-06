@@ -63,7 +63,7 @@ class Convert:
             return 0.0
         return self.current_frame / self.total_frames
 
-    def convert(self) -> tuple[list, int, int]:
+    def convert(self) -> tuple[list, int, int, float]:
         """
         動画の変換処理を行うメソッド
         """
@@ -73,6 +73,8 @@ class Convert:
             if not ret1:
                 logger.error("Failed to read frame from public video.")
                 break
+
+            fps = self.public_movie.get(cv2.CAP_PROP_FPS)
 
             # 秘密動画のフレームを取得
             ret2, secret_frame = self.private_movie.read()
@@ -97,6 +99,7 @@ class Convert:
             self.data.get_frames(),
             composition.get_width(),
             composition.get_height(),
+            fps,
         )
 
     def is_processing(self) -> bool:

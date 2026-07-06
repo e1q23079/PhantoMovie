@@ -37,10 +37,10 @@ class ConvertController:
         if self.converter is None:
             logger.error("Converter is not initialized.")
             return
-        convert_data, width, height = self.converter.convert()
+        convert_data, width, height, fps = self.converter.convert()
 
         writer = Writer(
-            filename=self.output_filename, fps=30, width=width, height=height
+            filename=self.output_filename, fps=fps, width=width, height=height
         )
         writer.save(convert_data)
         MessageBox.showinfo("変換完了", "動画の変換が完了しました。")

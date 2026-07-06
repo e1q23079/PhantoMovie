@@ -6,7 +6,7 @@ class Writer:
     動画を保存するためのクラス
     """
 
-    def __init__(self, filename: str, fps: int, width: int, height: int):
+    def __init__(self, filename: str, fps: float, width: int, height: int):
         """
         動画を保存するためのクラスの初期化
         :param filename: 保存する動画のファイル名
