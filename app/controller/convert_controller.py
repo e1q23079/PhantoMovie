@@ -59,6 +59,7 @@ class ConvertController:
             title="変換後の動画を保存",
             defaultextension=".avi",
             filetypes=(("AVI files", "*.avi"), ("All files", "*.*")),
+            confirmoverwrite=True,
         )
 
         if not self.output_filename:
