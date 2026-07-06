@@ -6,10 +6,18 @@ if TYPE_CHECKING:
 
 
 class UploadFrame:
+    """
+    UploadFrameクラスは、動画のアップロードを行うフレームを表すクラス
+    """
+
     def __init__(
         self,
         main_window: "MainWindow",
     ):
+        """
+        UploadFrameクラスの初期化
+        :param main_window: 親ウィンドウ
+        """
         self.main_window = main_window
         self.create_widgets()
 

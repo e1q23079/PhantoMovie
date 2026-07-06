@@ -6,6 +6,10 @@ if TYPE_CHECKING:
 
 
 class PlayerFrame:
+    """
+    PlayerFrameクラスは、動画の再生コントロールを提供するフレームを表すクラス
+    """
+
     def __init__(self, main_window: "MainWindow"):
         """
         PlayerFrameクラスの初期化
