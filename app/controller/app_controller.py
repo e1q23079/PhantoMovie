@@ -16,7 +16,14 @@ logger = getLogger(__name__)
 
 
 class AppController:
+    """
+    AppControllerクラスは、アプリケーション全体の制御を行うクラス
+    """
+
     def __init__(self, main_window: "MainWindow"):
+        """
+        AppControllerクラスの初期化
+        """
         self.main_window = main_window
         self.file = File()
         self.player = None
@@ -72,4 +79,12 @@ class AppController:
         """
         ret = MessageBox.askokcancel("確認", "本当に終了しますか？")
         if ret:
+            if (
+                self.convert_controller.is_processing()
+                or self.analyze_controller.is_processing()
+            ):
+                MessageBox.showwarning(
+                    "警告", "変換または解析処理中のため、終了できません。"
+                )
+                return
             self.main_window.destroy()

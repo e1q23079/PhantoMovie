@@ -13,7 +13,14 @@ logger = getLogger(__name__)
 
 
 class PlayerController:
+    """
+    PlayerControllerクラスは、動画再生の制御を行うクラス
+    """
+
     def __init__(self, main_window: "MainWindow", player: "Player"):
+        """
+        PlayerControllerクラスの初期化
+        """
         self.main_window = main_window
         self.player = player
 

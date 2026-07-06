@@ -19,7 +19,6 @@ class MainWindow(tk.Tk):
         super().__init__()
         self.setup()
         self.controller = AppController(self)
-        self.create_widgets()
 
     def setup(self):
         """
@@ -29,6 +28,8 @@ class MainWindow(tk.Tk):
         self.geometry("500x365")
         self.resizable(False, False)
         self.create_widgets()
+
+        self.player_btn_state("disabled")
 
     def create_widgets(self):
         """
@@ -41,6 +42,38 @@ class MainWindow(tk.Tk):
         self.player_frame = PlayerFrame(self)
         self.upload_frame = UploadFrame(self)
         self.progress_frame = ProgressFrame(self)
+
+    def all_btn_state(self, state):
+        """
+        すべてのボタンの状態を変更するメソッド
+        """
+        self.upload_frame.convert_btn.config(state=state)
+        self.upload_frame.analyze_btn.config(state=state)
+        self.player_frame.play_stop_btn.config(state=state)
+        self.player_frame.forward_btn.config(state=state)
+        self.player_frame.back_btn.config(state=state)
+        self.upload_frame.upload_public_movie_btn.config(state=state)
+        self.upload_frame.upload_private_movie_btn.config(state=state)
+
+    def convert_btn_state(self, state):
+        """
+        変換ボタンの状態を変更するメソッド
+        """
+        self.upload_frame.convert_btn.config(state=state)
+
+    def analyze_btn_state(self, state):
+        """
+        分析ボタンの状態を変更するメソッド
+        """
+        self.upload_frame.analyze_btn.config(state=state)
+
+    def player_btn_state(self, state):
+        """
+        プレイヤーボタンの状態を変更するメソッド
+        """
+        self.player_frame.play_stop_btn.config(state=state)
+        self.player_frame.forward_btn.config(state=state)
+        self.player_frame.back_btn.config(state=state)
 
     def run(self):
         """

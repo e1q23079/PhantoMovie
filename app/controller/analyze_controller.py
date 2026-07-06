@@ -15,24 +15,37 @@ logger = getLogger(__name__)
 
 
 class AnalyzeController:
+    """
+    AnalyzeControllerクラスは、動画解析の制御を行うクラス
+    """
+
     def __init__(
         self,
         main_window: "MainWindow",
         player: "Player",
         upload_controller: "UploadController",
     ):
+        """
+        AnalyzeControllerクラスの初期化
+        """
         self.main_window = main_window
         self.data = Data()
         self.player = player
         self.upload_controller = upload_controller
+        self.analyzer = None
 
     def analyze_thread(self):
         """
         解析処理を別スレッドで実行する
         """
+        self.main_window.all_btn_state("disabled")
+        if self.analyzer is None:
+            logger.error("Analyzer is not initialized.")
+            return
         analyze_data = self.analyzer.analyze()
         self.player.set_frames(analyze_data.get_frames())
         MessageBox.showinfo("解析完了", "動画の解析が完了しました。")
+        self.main_window.all_btn_state("normal")
         if self.public_movie is not None:
             self.public_movie.release()
 
@@ -63,3 +76,11 @@ class AnalyzeController:
         thread.start()
 
         self.main_window.progress_frame.start(self.analyzer.get_progress)
+
+    def is_processing(self):
+        """
+        解析処理中かどうかを返す
+        """
+        if self.analyzer is None:
+            return False
+        return self.analyzer.is_processing()

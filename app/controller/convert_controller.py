@@ -15,11 +15,40 @@ if TYPE_CHECKING:
 
 
 class ConvertController:
+    """
+    ConvertControllerクラスは、動画変換の制御を行うクラス
+    """
+
     def __init__(
         self, main_window: "MainWindow", upload_controller: "UploadController"
     ):
+        """
+        ConvertControllerクラスの初期化
+        """
         self.main_window = main_window
         self.upload_controller = upload_controller
+        self.converter = None
+
+    def convert_thread(self):
+        """
+        変換処理を別スレッドで実行する
+        """
+        self.main_window.all_btn_state("disabled")
+        if self.converter is None:
+            logger.error("Converter is not initialized.")
+            return
+        convert_data, width, height = self.converter.convert()
+
+        writer = Writer(
+            filename=self.output_filename, fps=30, width=width, height=height
+        )
+        writer.save(convert_data)
+        MessageBox.showinfo("変換完了", "動画の変換が完了しました。")
+        self.main_window.all_btn_state("normal")
+        if self.public_movie is not None:
+            self.public_movie.release()
+        if self.secret_movie is not None:
+            self.secret_movie.release()
 
     def convert_btn_click(self):
         """ "
@@ -67,18 +96,10 @@ class ConvertController:
 
         self.main_window.progress_frame.start(self.converter.get_progress)
 
-    def convert_thread(self):
+    def is_processing(self):
         """
-        変換処理を別スレッドで実行する
+        変換処理中かどうかを返す
         """
-        convert_data, width, height = self.converter.convert()
-
-        writer = Writer(
-            filename=self.output_filename, fps=30, width=width, height=height
-        )
-        writer.save(convert_data)
-        MessageBox.showinfo("変換完了", "動画の変換が完了しました。")
-        if self.public_movie is not None:
-            self.public_movie.release()
-        if self.secret_movie is not None:
-            self.secret_movie.release()
+        if self.converter is None:
+            return False
+        return self.converter.is_processing()

@@ -95,3 +95,12 @@ class Convert:
             composition.get_width(),
             composition.get_height(),
         )
+
+    def is_processing(self) -> bool:
+        """
+        変換処理中かどうかを返すメソッド
+
+        Returns:
+            bool: 変換処理中の場合はTrue、そうでない場合はFalse
+        """
+        return self.current_frame < self.total_frames

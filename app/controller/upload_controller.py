@@ -6,7 +6,14 @@ if TYPE_CHECKING:
 
 
 class UploadController:
+    """
+    UploadControllerクラスは、動画アップロードの制御を行うクラス
+    """
+
     def __init__(self, file: "File"):
+        """
+        UploadControllerクラスの初期化
+        """
         self.file = file
 
     def select_public_movie(self):

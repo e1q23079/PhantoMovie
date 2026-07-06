@@ -78,3 +78,12 @@ class Analyze:
             logger.debug(f"Processed frame {self.current_frame}/{self.total_frames}")
 
         return self.data
+
+    def is_processing(self) -> bool:
+        """
+        解析処理中かどうかを返すメソッド
+
+        Returns:
+            bool: 解析処理中の場合はTrue、そうでない場合はFalse
+        """
+        return self.current_frame < self.total_frames
