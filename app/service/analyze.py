@@ -5,6 +5,8 @@ import cv2
 from ..lib.diff import Diff
 from ..service.data import Data
 
+logger = getLogger(__name__)
+
 
 class Analyze:
     """
@@ -21,7 +23,6 @@ class Analyze:
         self.public_movie = public_movie
         self.current_frame = 0
         self.total_frames = self.get_total_frames()
-        self.logger = getLogger(__name__)
         self.data = Data()
 
     def _is_check(self) -> bool:
@@ -32,7 +33,7 @@ class Analyze:
             bool: 動画が正しく読み込まれている場合はTrue、そうでない場合はFalse
         """
         if not self.public_movie.isOpened():
-            self.logger.error("Failed to open public movie.")
+            logger.error("Failed to open public movie.")
             return False
         return True
 
@@ -65,7 +66,7 @@ class Analyze:
             # 公開動画のフレームを取得
             ret1, public_frame = self.public_movie.read()
             if not ret1:
-                self.logger.error("Failed to read frame from public video.")
+                logger.error("Failed to read frame from public video.")
                 break
 
             # 画像の差分
@@ -74,9 +75,6 @@ class Analyze:
             # データにフレームを追加
             self.data.add_frame(diff_result)
             self.current_frame += 1
-            self.logger.debug(
-                f"Processed frame {self.current_frame}/{self.total_frames}"
-            )
-            print(".", end="", flush=True)
+            logger.debug(f"Processed frame {self.current_frame}/{self.total_frames}")
 
         return self.data

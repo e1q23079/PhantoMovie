@@ -14,7 +14,7 @@ def main():
         format="%(asctime)s - %(filename)s - %(lineno)d - %(name)s - %(levelname)s - %(message)s",
     )
     logger = getLogger(__name__)
-    logger.debug("Main function is running.")
+    logger.info("Main function is running.")
     # app.app()
     app = Application()
     app.run()

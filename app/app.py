@@ -14,7 +14,7 @@ def app():
     アプリケーション
     """
     logger = getLogger(__name__)
-    logger.debug("Application is running.")
+    logger.info("Application is running.")
 
     # ファイルのセット
     file = File()

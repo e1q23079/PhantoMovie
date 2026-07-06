@@ -1,4 +1,5 @@
 import tkinter as tk
+from logging import getLogger
 from typing import TYPE_CHECKING
 
 import cv2
@@ -7,6 +8,8 @@ from PIL import Image, ImageTk
 if TYPE_CHECKING:
     from ..service.player import Player
     from ..ui.main_window import MainWindow
+
+logger = getLogger(__name__)
 
 
 class PlayerController:
@@ -34,21 +37,21 @@ class PlayerController:
         """
         次のフレームを表示する
         """
-        print("Next frame...")
+        logger.debug("Displaying next frame...")
         if self.player is None:
-            print("Movie is not loaded.")
+            logger.error("Movie is not loaded.")
             return
         if self.player.get_is_playing() is False:
-            print("Movie is not playing.")
+            logger.debug("Movie is not playing.")
             return
         ret, img_bgr = self.player.get_frame()
         if not ret:
             self.player.reset_current_frame_index()
             self.player.stop_movie()
-            print("Error reading frame")
+            logger.error("Error reading frame")
             return
         if img_bgr is None:
-            print("No more frames to display.")
+            logger.debug("No more frames to display.")
             return
 
         self.render_frame(img_bgr)
@@ -59,9 +62,9 @@ class PlayerController:
         """
         再生/停止ボタンがクリックされたときの処理
         """
-        print("Play/Stop button clicked...")
+        logger.debug("Play/Stop button clicked...")
         if self.player is None:
-            print("Movie is not loaded.")
+            logger.error("Movie is not loaded.")
             return
         if self.player.get_is_playing():
             self.stop_movie()
@@ -72,9 +75,9 @@ class PlayerController:
         """
         動画を停止する
         """
-        print("Stopping movie...")
+        logger.debug("Stopping movie...")
         if self.player is None:
-            print("Movie is not loaded.")
+            logger.error("Movie is not loaded.")
             return
         self.player.stop_movie()
 
@@ -82,9 +85,9 @@ class PlayerController:
         """
         動画を再生する
         """
-        print("Playing movie...")
+        logger.debug("Playing movie...")
         if self.player is None:
-            print("Movie is not loaded.")
+            logger.error("Movie is not loaded.")
             return
         self.player.play_movie()
         self.main_window.after(33, self.next_frame)
@@ -93,14 +96,14 @@ class PlayerController:
         """
         動画を早送りする
         """
-        print("Forwarding movie...")
+        logger.debug("Forwarding movie...")
         if self.player is None:
-            print("Movie is not loaded.")
+            logger.error("Movie is not loaded.")
             return
         self.player.forward_movie()
         frame = self.player.get_current_frame()
         if frame is None:
-            print("No more frames to display.")
+            logger.debug("No more frames to display.")
             return
         self.render_frame(frame)
 
@@ -108,13 +111,13 @@ class PlayerController:
         """
         動画を巻き戻す
         """
-        print("Rewinding movie...")
+        logger.debug("Rewinding movie...")
         if self.player is None:
-            print("Movie is not loaded.")
+            logger.error("Movie is not loaded.")
             return
         self.player.backward_movie()
         frame = self.player.get_current_frame()
         if frame is None:
-            print("No more frames to display.")
+            logger.debug("No more frames to display.")
             return
         self.render_frame(frame)

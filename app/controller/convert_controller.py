@@ -25,7 +25,7 @@ class ConvertController:
         """ "
         変換ボタンがクリックされたときの処理
         """
-        print("Converting video...")
+        logger.debug("Converting video...")
         self.output_filename = filedialog.asksaveasfilename(
             title="変換後の動画を保存",
             defaultextension=".avi",

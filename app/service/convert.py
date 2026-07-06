@@ -5,6 +5,8 @@ import cv2
 from ..lib.composition import Composition
 from ..service.data import Data
 
+logger = getLogger(__name__)
+
 
 class Convert:
     """
@@ -19,7 +21,6 @@ class Convert:
         self.private_movie = private_movie
         self.current_frame = 0
         self.total_frames = self.get_total_frames()
-        self.logger = getLogger(__name__)
         self.data = Data()
 
     def _is_check(self) -> bool:
@@ -30,10 +31,10 @@ class Convert:
             bool: 動画が正しく読み込まれている場合はTrue、そうでない場合はFalse
         """
         if not self.public_movie.isOpened():
-            self.logger.error("Failed to open public movie.")
+            logger.error("Failed to open public movie.")
             return False
         if not self.private_movie.isOpened():
-            self.logger.error("Failed to open private movie.")
+            logger.error("Failed to open private movie.")
             return False
         return True
 
@@ -67,13 +68,13 @@ class Convert:
             # 公開動画のフレームを取得
             ret1, public_frame = self.public_movie.read()
             if not ret1:
-                self.logger.error("Failed to read frame from public video.")
+                logger.error("Failed to read frame from public video.")
                 break
 
             # 秘密動画のフレームを取得
             ret2, secret_frame = self.private_movie.read()
             if not ret2:
-                self.logger.error("Failed to read frame from secret video.")
+                logger.error("Failed to read frame from secret video.")
                 break
 
             # リサイズ
@@ -87,10 +88,7 @@ class Convert:
             # データの書き込み
             self.data.add_frame(compose_result)
             self.current_frame += 1
-            self.logger.debug(
-                f"Processed frame {self.current_frame}/{self.total_frames}"
-            )
-            print(".", end="", flush=True)
+            logger.debug(f"Processed frame {self.current_frame}/{self.total_frames}")
 
         return (
             self.data.get_frames(),

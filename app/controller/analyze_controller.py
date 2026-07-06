@@ -40,7 +40,7 @@ class AnalyzeController:
         """ "
         解析ボタンがクリックされたときの処理
         """
-        print("Analyzing video...")
+        logger.debug("Analyzing video...")
 
         # 公開動画の取得
         self.public_movie = self.upload_controller.file.get_public_movie()

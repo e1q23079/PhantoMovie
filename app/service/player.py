@@ -65,7 +65,7 @@ class Player:
         """
         # Logic to play the movie
         self.is_playing = True
-        logger.info("Playing movie...")
+        logger.debug("Playing movie...")
 
     def stop_movie(self):
         """
@@ -73,14 +73,14 @@ class Player:
         """
         self.is_playing = False
         # Logic to stop the movie
-        logger.info("Stopping movie...")
+        logger.debug("Stopping movie...")
 
     def backward_movie(self):
         """
         動画を巻き戻す
         """
         # Logic to backward the movie
-        logger.info("Rewinding movie...")
+        logger.debug("Rewinding movie...")
         self.current_frame_index = max(0, self.current_frame_index - 10)
 
     def forward_movie(self):
@@ -88,7 +88,7 @@ class Player:
         動画を早送りする
         """
         # Logic to forward the movie
-        logger.info("Forwarding movie...")
+        logger.debug("Forwarding movie...")
         self.current_frame_index = min(
             len(self.frames) - 1, self.current_frame_index + 10
         )

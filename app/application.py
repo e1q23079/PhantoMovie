@@ -1,5 +1,9 @@
+from logging import getLogger
+
 from app.controller.app_controller import AppController
 from app.ui.main_window import MainWindow
+
+logger = getLogger(__name__)
 
 
 class Application:
@@ -7,6 +11,7 @@ class Application:
         """
         Applicationクラスの初期化
         """
+        logger.info("Application is running.")
         self.main_window = MainWindow()
         self.app_controller = AppController(self.main_window)
 
