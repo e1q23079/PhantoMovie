@@ -25,13 +25,13 @@ pip install -r requirements.txt
 `app\service\convert.py`
 
 ```py
-from ..lib.diff2 import Diff
+from ..lib.composition2 import Composition
 ```
 
 `app\service\analyze.py`
 
 ```py
-from ..lib.composition2 import Composition
+from ..lib.diff2 import Diff
 ```
 
 ## アプリケーションの実行
