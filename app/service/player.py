@@ -81,7 +81,7 @@ class Player:
         """
         # Logic to backward the movie
         logger.info("Rewinding movie...")
-        self.current_frame_index = max(0, self.current_frame_index - 1)
+        self.current_frame_index = max(0, self.current_frame_index - 10)
 
     def forward_movie(self):
         """
@@ -90,5 +90,5 @@ class Player:
         # Logic to forward the movie
         logger.info("Forwarding movie...")
         self.current_frame_index = min(
-            len(self.frames) - 1, self.current_frame_index + 1
+            len(self.frames) - 1, self.current_frame_index + 10
         )
