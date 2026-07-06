@@ -31,7 +31,7 @@ class UploadFrame:
         public_upload_frame.grid(row=2, column=0, padx=10, pady=1)
 
         self.upload_public_movie_btn = tk.Button(
-            public_upload_frame, text="「公開動画」を選択"
+            public_upload_frame, text=" 「公開動画」を選択 "
         )
         self.upload_public_movie_btn.grid(row=0, column=0, columnspan=2, pady=1)
 
@@ -43,7 +43,7 @@ class UploadFrame:
         private_upload_frame.grid(row=3, column=0, padx=10, pady=1)
 
         self.upload_private_movie_btn = tk.Button(
-            private_upload_frame, text="「秘密動画」を選択"
+            private_upload_frame, text=" 「秘密動画」を選択 "
         )
         self.upload_private_movie_btn.grid(row=0, column=0, columnspan=2, pady=1)
 
