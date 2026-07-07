@@ -41,19 +41,19 @@ def clear_4b(value: int) -> int:
     return result
 
 
-def set_4b(value: int, lsb: int) -> int:
+def set_4b(value: int, b4: int) -> int:
     """
     10進数の値の最下位4ビットを指定された値に設定する
 
     Args:
         value (int): LSBを設定する値
-        lsb (int): 設定する最下位4ビットの値（0または1）
+        b4 (int): 設定する最下位4ビットの値（0または1）
 
     Returns:
         int: 最下位4ビットが設定された新しい値
     """
     binary = _to_binary_str(value)
-    result = int(binary[:-4] + f"{lsb:04b}", 2)
+    result = int(binary[:-4] + f"{b4:04b}", 2)
     return result
 
 
