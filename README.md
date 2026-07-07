@@ -17,21 +17,21 @@ pip install -r requirements.txt
 
 ## 埋め込む下位ビット数の変更
 
-下記の使用するライブラリを書き換えることで，秘密鍵を埋め込むビット数の変更する．
+下記の使用するライブラリを書き換えることで，秘密動画を埋め込むビット数の変更する．
 
-- `diff`・`composition`：LSB（下位1ビット）
-- `diff2`・`composition2`：下位4ビット
+- `lsb.diff`・`lsb.composition`：LSB（下位1ビット）
+- `b4.diff`・`b4.composition`：下位4ビット
 
 `app\service\convert.py`
 
 ```py
-from ..lib.composition2 import Composition
+from ..lib.convert.b4.composition import Composition
 ```
 
 `app\service\analyze.py`
 
 ```py
-from ..lib.diff2 import Diff
+from ..lib.analyze.b4.diff import Diff
 ```
 
 ## アプリケーションの実行
