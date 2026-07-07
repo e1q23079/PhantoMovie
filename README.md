@@ -6,6 +6,8 @@
 
 ## Environment Construction
 
+仮想環境を構築し，ライブラリをインストールする．
+
 ```bash
 # 仮想環境を作成する
 python -m venv .venv
