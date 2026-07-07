@@ -36,7 +36,7 @@ from ..lib.convert.b4.composition import Composition
 from ..lib.analyze.b4.diff import Diff
 ```
 
-## アプリケーションの実行
+## Running the application
 
 以下のコマンドを実行して，アプリケーションを起動する．
 
