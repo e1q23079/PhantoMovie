@@ -1,6 +1,6 @@
 import unittest
 
-from app.lib import lsb
+from app.lib.func import lsb
 
 
 class TestLSB(unittest.TestCase):

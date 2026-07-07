@@ -1,6 +1,6 @@
 import unittest
 
-from app.lib import binary
+from app.lib.func import binary
 
 
 class TestBinary(unittest.TestCase):
