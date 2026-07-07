@@ -1,2 +1,4 @@
 __pycache__/
 .venv
+assets/movie/*.mp4
+assets/movie/*.avi
