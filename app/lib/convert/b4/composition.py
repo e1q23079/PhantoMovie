@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 from ...img import IMG
-from .formula2 import Formula
+from .formula import Formula
 
 
 class Composition:

@@ -3,7 +3,7 @@ from tkinter import messagebox as MessageBox
 
 import cv2
 
-from ..lib.analyze.b4.diff2 import Diff
+from ..lib.analyze.b4.diff import Diff
 from ..service.data import Data
 
 logger = getLogger(__name__)
