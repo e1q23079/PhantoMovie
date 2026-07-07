@@ -57,7 +57,7 @@ class ConvertController:
         """
         logger.debug("Converting video...")
         self.output_filename = filedialog.asksaveasfilename(
-            title="変換後の動画を保存",
+            title="「公開秘密動画」を保存",
             defaultextension=".avi",
             filetypes=(("AVI files", "*.avi"), ("All files", "*.*")),
             confirmoverwrite=True,

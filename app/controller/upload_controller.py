@@ -21,7 +21,7 @@ class UploadController:
         公開動画を選択するメソッド
         """
         filename = filedialog.askopenfilename(
-            title="公開",
+            title="「公開動画」を開く",
             filetypes=(("Video files", "*.mp4 *.avi"), ("All files", "*.*")),
         )
         self.file.set_public_movie_path(filename)
@@ -31,7 +31,7 @@ class UploadController:
         秘密動画を選択するメソッド
         """
         filename = filedialog.askopenfilename(
-            title="秘密",
+            title="「秘密動画」を開く",
             filetypes=(("Video files", "*.mp4 *.avi"), ("All files", "*.*")),
         )
         self.file.set_private_movie_path(filename)
