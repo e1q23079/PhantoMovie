@@ -16,35 +16,12 @@ class Formula:
         self.img1 = img1
         self.img2 = img2
 
-    def _classify(self, value: int) -> int:
-        """
-        入力された値を分類する
-        """
-        wide = int(255 / 8)
-        if value < wide:
-            return 0
-        elif value < wide * 2:
-            return 1
-        elif value < wide * 3:
-            return 2
-        elif value < wide * 4:
-            return 3
-        elif value < wide * 5:
-            return 4
-        elif value < wide * 6:
-            return 5
-        elif value < wide * 7:
-            return 6
-        elif value < wide * 8:
-            return 7
-        return 8
-
     def _convert(self, value1: int, value2: int) -> int:
         """
         入力された2つの値を変換する
         """
         clear_lsb_value1 = binary.clear_4b(value1)
-        classified_value2 = self._classify(value2)
+        classified_value2 = binary.classify(value2)
         return binary.set_4b(clear_lsb_value1, classified_value2)
 
     def __call__(self, x: int, y: int) -> list[int]:

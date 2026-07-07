@@ -57,6 +57,30 @@ def set_4b(value: int, lsb: int) -> int:
     return result
 
 
+def classify(value: int) -> int:
+    """
+    入力された値を分類する
+    """
+    wide = int(255 / 8)
+    if value < wide:
+        return 0
+    elif value < wide * 2:
+        return 1
+    elif value < wide * 3:
+        return 2
+    elif value < wide * 4:
+        return 3
+    elif value < wide * 5:
+        return 4
+    elif value < wide * 6:
+        return 5
+    elif value < wide * 7:
+        return 6
+    elif value < wide * 8:
+        return 7
+    return 8
+
+
 def revert_classify(value: int) -> int:
     """
     入力された値を分類する
