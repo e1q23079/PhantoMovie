@@ -1,7 +1,7 @@
 import numpy as np
 
-from ..lib.img import IMG
-from ..lib.re_formula2 import ReFormula
+from ...img import IMG
+from .re_formula2 import ReFormula
 
 
 class Diff:

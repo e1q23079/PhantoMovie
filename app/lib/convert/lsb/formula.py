@@ -1,5 +1,5 @@
-from ..lib import lsb
-from ..lib.img import IMG
+from ...func import lsb
+from ...img import IMG
 
 
 class Formula:

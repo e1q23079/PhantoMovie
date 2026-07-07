@@ -1,5 +1,5 @@
-from ..lib import binary
-from ..lib.img import IMG
+from ...func import binary
+from ...img import IMG
 
 
 class Formula:

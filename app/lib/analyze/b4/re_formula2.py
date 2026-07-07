@@ -1,5 +1,5 @@
-from ..lib import lsb
-from ..lib.img import IMG
+from ...func import binary
+from ...img import IMG
 
 
 class ReFormula:
@@ -10,16 +10,13 @@ class ReFormula:
         """
         self.img = img
 
-    def _diff_pixel(self, value) -> int:
+    def _diff_pixel(self, value: int) -> int:
         """
         指定された座標のピクセル値の差分を計算する
         :param value: ピクセル値
         :return: 計算されたピクセル値の差分
         """
-        if lsb.get_lsb(value) == 1:
-            result = 255
-        else:
-            result = 0
+        result = binary.revert_classify(binary.get_4b(value))
 
         return result
 

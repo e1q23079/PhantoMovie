@@ -1,8 +1,8 @@
 import cv2
 import numpy as np
 
-from ..lib.formula2 import Formula
-from ..lib.img import IMG
+from ...img import IMG
+from .formula2 import Formula
 
 
 class Composition:
