@@ -4,7 +4,7 @@
 
 ![alt text](./assets/image.png)
 
-## 環境構築
+## Environment Construction
 
 ```bash
 # 仮想環境を作成する
@@ -15,7 +15,9 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-## 埋め込む下位ビット数の変更
+## Setting
+
+### 埋め込む下位ビット数の変更
 
 下記の使用するライブラリを書き換えることで，秘密動画を埋め込むビット数の変更する．
 
