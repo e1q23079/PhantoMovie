@@ -4,7 +4,7 @@
 
 ![alt text](./assets/image.png)
 
-## Environment Construction
+## Environment construction
 
 仮想環境を構築し，ライブラリをインストールする．
 
